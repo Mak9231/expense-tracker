@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  # get "test/index"
-  get 'test', to: 'test#index'
-
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,13 +9,15 @@ Rails.application.routes.draw do
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 
-  delete 'test', to: 'test#destroy'
-
-
   # Defines the root path route ("/")
-  resources :expenses
+  # resources :expenses
+  root "expenses#index"
 
 
-
+  resources :expenses do
+    collection do
+      get :export
+    end
+  end
   # root "posts#index"
 end

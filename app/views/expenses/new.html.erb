@@ -27,10 +27,19 @@
     <%= form.date_field :date %>
   </div>
 
-  <div class="field">
-    <%= form.label :category %>
-    <%= form.text_field :category %>
-  </div>
+
+
+<div class="field">
+  <%= form.label :category_name, "Catégorie" %>
+  <%= form.text_field :category_name, list: "category-list" %>
+  <datalist id="category-list">
+    <% Category.select(:name).distinct.pluck(:name).each do |cat| %>
+      <option value="<%= cat %>">
+    <% end %>
+  </datalist>
+</div>
+
+
 
   <div class="actions">
     <%= form.submit %>

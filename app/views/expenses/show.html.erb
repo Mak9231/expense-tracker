@@ -1,8 +1,18 @@
-<h1><%= @expense.title %></h1>
+<h2 style="margin-bottom: 20px;">Détail de la dépense</h2>
 
-<p><strong>Amount:</strong> <%= number_to_currency(@expense.amount) %></p>
-<p><strong>Date:</strong> <%= @expense.date.strftime('%d %B %Y') %></p>
-<p><strong>Category:</strong> <%= @expense.category %></p>
+<div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; max-width: 500px;">
+  <p><strong>Titre :</strong> <%= @expense.title %></p>
+  <p><strong>Montant :</strong> <%= number_to_currency(@expense.amount, unit: "€") %></p>
+  <p><strong>Date :</strong> <%= @expense.date.strftime("%d %B %Y") if @expense.date %></p>
+  <p><strong>Catégorie :</strong> <%= @expense.category %></p>
+</div>
 
-<%= link_to 'Edit', edit_expense_path(@expense) %> |
-<%= link_to 'Back to list', expenses_path %>
+<div style="margin-top: 20px;">
+  <%= link_to edit_expense_path(@expense), class: "btn btn-warning" do %>
+    <i class="fas fa-pen"></i> Modifier
+  <% end %>
+
+  <%= link_to expenses_path, class: "btn btn-secondary" do %>
+    <i class="fas fa-arrow-left"></i> Retour
+  <% end %>
+</div>

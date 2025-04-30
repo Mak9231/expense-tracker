@@ -1,3 +1,55 @@
+<h2>Modifier la dépense</h2>
+
+<div style="max-width: 500px;">
+  <%= form_with(model: @expense, local: true) do |form| %>
+    <div class="form-group">
+      <%= form.label :title %>
+      <%= form.text_field :title, class: "form-control" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :amount %>
+      <%= form.number_field :amount, class: "form-control", step: 0.01 %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :date %>
+      <%= form.date_field :date, class: "form-control" %>
+    </div>
+
+    <%# <div class="form-group">
+      <%= form.label :category %>
+      <%# <%= form.text_field :category, class: "form-control" %>
+    <%# </div> %>
+
+    <div style="margin-top: 15px;">
+      <%= form.submit class: "btn btn-success" do %>
+        <i class="fas fa-check"></i> Enregistrer
+      <% end %>
+
+
+      <div class="mb-3">
+      <%= form.label :category_name, "Catégorie" %>
+      <%= form.text_field :category_name, list: "category-options", class: "form-control" %>
+
+      <datalist id="category-options">
+        <% Category.all.each do |category| %>
+          <option value="<%= category.name %>">
+        <% end %>
+      </datalist>
+    </div>
+
+
+
+      <%= link_to expense_path(@expense), class: "btn btn-secondary" do %>
+        <i class="fas fa-ban"></i> Annuler
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<%# JE DOIS SUPPRIMER LE BLOC DU BAS %>
+
 <h1>Edit Expense</h1>
 
 <%= form_with(model: @expense, local: true) do |form| %>
@@ -28,13 +80,19 @@
   </div>
 
   <div class="field">
-    <%= form.label :category %>
-    <%= form.text_field :category %>
-  </div>
+  <%= form.label :category_name, "Catégorie" %>
+  <%= form.text_field :category_name, list: "category-list" %>
+  <datalist id="category-list">
+    <% Category.select(:name).distinct.pluck(:name).each do |cat| %>
+      <option value="<%= cat %>">
+    <% end %>
+  </datalist>
+</div>
+
 
   <div class="actions">
     <%= form.submit "Update Expense" %>
   </div>
 <% end %>
 
-<%= link_to 'Back to list', expenses_path %>
+<%= link_to 'Back', expenses_path %>

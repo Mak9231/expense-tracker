@@ -55,3 +55,8 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "chartkick"
+gem "groupdate"
+
+gem "tailwindcss-rails", "~> 4.2"

@@ -13,3 +13,35 @@
  *= require_tree .
  *= require_self
  */
+
+.custom-btn {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.custom-btn-view {
+  background-color: #6c5ce7; /* Violet */
+}
+
+.custom-btn-edit {
+  background-color: #00b894; /* Vert menthe */
+}
+
+.custom-btn-delete {
+  background-color: #d63031; /* Rouge profond */
+}
+
+.custom-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.custom-btn:active {
+  transform: scale(0.97);
+}

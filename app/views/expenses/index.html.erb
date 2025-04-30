@@ -1,33 +1,114 @@
-<h1>All Expenses</h1>
-<% if notice %>
-  <p style="color: green;"><%= notice %></p>
-<% end %>
+<div class="container mt-5">
+  <h1 class="mb-4">Toutes les dépenses</h1>
 
-<%= link_to 'New Expense', new_expense_path %>
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Amount</th>
-      <th>Date</th>
-      <th>Category</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @expenses.each do |expense| %>
+  <%= link_to 'Nouvelle dépense', new_expense_path, class: "btn btn-primary mb-3" %>
+  <%= link_to "Exporter en CSV", export_expenses_path, class: "btn btn-success mb-3 ms-2" %>
+
+  <div class="card mb-4">
+    <div class="card-body">
+      <%= form_with url: expenses_path, method: :get, local: true, class: "row g-3" do %>
+        <div class="col-md-3">
+          <%= label_tag :query, "Recherche par titre" %>
+          <%= text_field_tag :query, params[:query], class: "form-control" %>
+        </div>
+        <div class="col-md-3">
+          <%= label_tag :start_date, "Date de début" %>
+          <%= date_field_tag :start_date, params[:start_date], class: "form-control" %>
+        </div>
+        <div class="col-md-3">
+          <%= label_tag :end_date, "Date de fin" %>
+          <%= date_field_tag :end_date, params[:end_date], class: "form-control" %>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <%= submit_tag "Filtrer", class: "btn btn-outline-primary" %>
+        </div>
+      <% end %>
+    </div>
+    <p>
+  Trier par :
+  <%= link_to "📅 Date", expenses_path(sort: "date") %> |
+  <%= link_to "💰 Montant", expenses_path(sort: "amount") %>
+</p>
+
+  </div>
+
+
+  <h2 class="text-danger">Total des dépenses : <%= number_to_currency(@total_amount, unit: "€") %></h2>
+
+  <%# <%= line_chart @expenses_by_date, xtitle: "Date", ytitle: "Montant (€)", library: {backgroundColor: "#fff"} %>
+  <%= line_chart @expenses_by_date,
+  xtitle: "Date",
+  ytitle: "Montant (€)",
+  library: {
+    backgroundColor: "#f5f5f5",
+    colors: ["#e74c3c"],
+    animation: { duration: 6000 },
+    lineTension: 0.3,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: %|function(value) { return value + " €"; }|
+        }
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: %|function(context) {
+            return context.dataset.label + ": " + context.formattedValue + " €";
+          }|
+        }
+      }
+    }
+  }
+%>
+
+
+  <table class="table table-hover mt-4">
+    <thead class="table-dark">
       <tr>
-        <td><%= expense.title %></td>
-        <td><%= number_to_currency(expense.amount) %></td>
-        <td><%= expense.date.strftime("%d %b %Y") %></td>
-        <td><%= expense.category %></td>
-        <td>
-          <%= link_to 'Show', expense_path(expense) %> |
-          <%= link_to 'Edit', edit_expense_path(expense) %> |
-          <%= link_to "Supprimer", expense_path(expense), data: { turbo_method: :delete, turbo_confirm: "Supprimer cette dépense ?" } %>
-
-        </td>
+        <th>Title</th>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Category</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @expenses.each do |expense| %>
+        <tr>
+          <td><%= expense.title %></td>
+          <td><%= number_to_currency(expense.amount) %></td>
+          <td><%= expense.date&.strftime("%d %b %Y") %></td>
+          <td><%= expense.category&.name || "Non défini" %></td>
+
+
+        <td>
+              <%= link_to expense_path(expense), class: "custom-btn custom-btn-view" do %>
+                <i class="fas fa-eye"></i> Afficher
+              <% end %>
+
+              <%= link_to edit_expense_path(expense), class: "custom-btn custom-btn-edit" do %>
+                <i class="fas fa-pen"></i> Modifier
+              <% end %>
+
+              <%= link_to expense_path(expense), method: :delete, data: { confirm: 'Supprimer cette dépense ?' }, class: "custom-btn custom-btn-delete" do %>
+                <i class="fas fa-trash"></i> Supprimer
+                <% end %>
+        </td>
+
+
+
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+
+<%# j'ai mis l'ancienne version dans le README %>
